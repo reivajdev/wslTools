@@ -25,6 +25,7 @@ function create-wsl {
     param (
         [Parameter(Mandatory=$true)]
         [string]$Name,                # Nombre de la distribución
+        [string]$UserName="reivaj2dev",                # Nombre del usuario
         [string]$ImportPath = "D:\linux_system",  # Ruta para importar
         [string]$Tarball = "D:\linux_system\00.image\debian.tar" # Ruta del archivo TAR
     )
@@ -43,7 +44,7 @@ function create-wsl {
 
     # Escribir en /etc/wsl.conf
     wsl -d $Name bash -c "echo '[user]' | sudo tee -a /etc/wsl.conf"
-    wsl -d $Name bash -c "echo 'default=reivaj2dev' | sudo tee -a /etc/wsl.conf"
+    wsl -d $Name bash -c "echo 'default=$UserName' | sudo tee -a /etc/wsl.conf"
     wsl -d $Name bash -c "echo '[network]' | sudo tee -a /etc/wsl.conf"
     wsl -d $Name bash -c "echo 'hostname=$Name' | sudo tee -a /etc/wsl.conf"
 
@@ -52,7 +53,7 @@ function create-wsl {
     # Finalizar la instancia de WSL y configurar .bashrc
     Write-Host "Terminado '$Name'..." -ForegroundColor Green
     wsl -t $Name
-    wsl -d $Name bash -c "echo cd ~ >> /home/reivaj2dev/.bashrc"
+    wsl -d $Name bash -c "echo cd ~ >> /home/$UserName/.bashrc"
     wsl -t $Name
 
     Write-Host "Configuración completada para la distribución '$Name'." -ForegroundColor Green
@@ -60,3 +61,4 @@ function create-wsl {
     # Crear el alias para esta distribución
     create-alias-wsl -AliasName $Name
 }
+
